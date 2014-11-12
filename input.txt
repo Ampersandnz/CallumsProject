@@ -1,0 +1,7 @@
+#Total_donation_pool
+#Business1 name_Business1 ratio_Business1 cap
+#Business2 name_Business2 ratio_Business2 cap
+#...
+50000
+Example1_1_10000
+Ex amp le 2_1_2000

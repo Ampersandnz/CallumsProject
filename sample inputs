@@ -1,0 +1,23 @@
+Case 1: Aggregate < Donated
+	total donated: 100,000
+	business 1 cap: 50,000
+	business 2 cap: 10,000
+	business 3 cap: 0
+
+	aggregate cap = 60,000
+
+	business 1 donates 50,000
+	business 2 donates 10,000
+	business 3 donates (100,000 - 60,000) / 1 = 40,000
+
+Case 2: Aggregate > Donated
+	total donated: 50,000
+	business 1 cap: 50,000
+	business 2 cap: 10,000
+	business 3 cap: 0
+
+	aggregate cap = 60,000
+
+	business 1 donates 5/6 * 50,000 = 41,666
+	business 2 donates 1/6 * 50,000 = 8,333
+	business 3 donates 0
