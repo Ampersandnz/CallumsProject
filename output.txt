@@ -1,0 +1,8 @@
+Donation pool: 50000
+Total donated by businesses: 0
+Total donations: 50000
+
+Business | Donation | Cap | Remainder | Custom fields/notes
+Example1 | 41666.67 | 50000 | 8333.330000000002 | 0221837240
+Ex amp le 2 | 8333.33 | 10000 | 1666.67 | test@google.com | Michael Lo
+example3 | 50000.0 | 0 | N/A | 

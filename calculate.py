@@ -1,18 +1,21 @@
 __author__ = 'Michael Lo'
 
-import os
-
 # Filename of input text file
 input_file = "input.txt"
+output_file = "output.txt"
 
 
 # Represents a business
 class Business:
     def __init__(self, name, ratio, cap, custom_fields):
         self.name = name
-        self.ratio = ratio
-        self.cap = cap
+        self.ratio = float(ratio)
+        self.cap = int(cap)
+        self.donation = 0
         self.custom_fields = custom_fields
+
+    def set_donation(self, donation):
+        self.donation = donation
 
     def get_name(self):
         return self.name
@@ -23,81 +26,91 @@ class Business:
     def get_cap(self):
         return self.cap
 
+    def get_donation(self):
+        return round(self.donation, 2)
+
     def get_custom_fields(self):
         return self.custom_fields
 
 
-# Represents all businesses with donation caps.
-# Contributions up to the sum of the caps will be split equally by these businesses.
-class RegularBusinesses:
-    def __init__(self):
-        self.businesses = []
-
-    def get_businesses(self):
-        return self.businesses
-
-    def get_business(self, name):
-        for business in self.businesses:
-            if business.get_name() == name:
-                return business
-
-    def add_business(self, business):
-        self.businesses.append(business)
-
-
-# Represents all businesses with donation caps.
-# Contributions above the sum of the caps will be split equally by these businesses.
-class NoCapBusinesses:
-    def __init__(self):
-        self.businesses = []
-
-    def get_businesses(self):
-        return self.businesses
-
-    def get_business(self, name):
-        for business in self.businesses:
-            if business.get_name() == name:
-                return business
-
-    def add_business(self, business):
-        self.businesses.append(business)
-
-regularBusinesses = RegularBusinesses()
-noCapBusinesses = NoCapBusinesses()
+donation_pool = 0
+business_donations = 0
+businesses = []
 
 
 def main():
-    directory = os.path.dirname(os.getcwd())
-    os.chdir(directory)
-    read_input(input_file)
+    read_input()
     do_calculations()
     write_output()
 
 
 def read_input():
-    pass
-    # Read in file
-    # For each line in file:
-        # Create Business object representing it
+    file = open(input_file, 'r')
+    line_count = 0
+    for line in file:
+        line = line.rstrip()
+        if not (line.startswith('#')):
+            if line.isdigit():
+                global donation_pool
+                donation_pool = int(line)
+                print(donation_pool)
+            else:
+                try:
+                    split_line = line.split('_')
+                    print(split_line)
+                    business = Business(split_line.pop(0), split_line.pop(0), split_line.pop(0), split_line)
+                    businesses.append(business)
+                except TypeError:
+                    print("Error in format of line: " + line_count)
 
 
 def do_calculations():
-    pass
-    # Sum caps
-    # If cap lower than total donation pool:
-        # All regular businesses pay an equal proportion (same percentage of their cap)
-    # Else:
-        # All regular businesses pay their cap
-        # All no cap businesses pay an equal share of (total donated - aggregate cap)
+    sum_of_caps = 0
+    businesses_with_no_cap = 0
+
+    for business in businesses:
+        sum_of_caps += business.get_cap()
+
+        if business.get_cap() == 0:
+            businesses_with_no_cap += 1
+
+    if sum_of_caps > donation_pool:
+        for business in businesses:
+            if business.get_cap() == 0:
+                business.set_donation((donation_pool * business.get_ratio()))
+            else:
+                business.set_donation((business.get_cap() / sum_of_caps) * donation_pool)
+    else:
+        for business in businesses:
+            if business.get_cap() == 0:
+                business.set_donation((donation_pool * business.get_ratio()))
+            else:
+                business.set_donation(business.get_cap())
 
 
 def write_output():
-    pass
-    # Print total donation pool
-    # Print total donated by businesses
-    # Print total donations (people and businesses)
-    # For each business:
-        # Print out name, amount to pay, unpaid amount remaining in cap, custom fields
+    file = open(output_file, 'w')
+    file.write("Donation pool: " + str(donation_pool) + "\n")
+    file.write("Total donated by businesses: " + str(business_donations) + "\n")
+    file.write("Total donations: " + str(business_donations + donation_pool) + "\n")
+    file.write("\n")
+
+    file.write("Business | Donation | Cap | Remainder | Custom fields/notes\n")
+
+    for business in businesses:
+        custom_fields = ""
+
+        if len(business.get_custom_fields()) > 0:
+            for field in business.get_custom_fields()[0:-1]:
+                custom_fields = custom_fields + field + " | "
+            custom_fields = custom_fields + business.get_custom_fields()[-1]
+
+        remainder = str(business.get_cap() - business.get_donation())
+        if business.get_cap() == 0:
+            remainder = "N/A"
+
+        file.write(business.get_name() + " | " + str(business.get_donation()) + " | " + str(business.get_cap()) + " | "
+                   + remainder + " | " + custom_fields + "\n")
 
 if __name__ == '__main__':
     main()

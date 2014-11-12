@@ -1,7 +1,8 @@
 #Total_donation_pool
-#Business1 name_Business1 ratio_Business1 cap
-#Business2 name_Business2 ratio_Business2 cap
+#Business1 name_Business1 ratio_Business1 cap_custom field 1_custom field 2_..._custom field n
+#Business2 name_Business2 ratio_Business2 cap_custom field 1_custom field 2_..._custom field n
 #...
-50000
-Example1_1_10000
-Ex amp le 2_1_2000
+100000
+Example1_1_50000_0221837240
+Ex amp le 2_1_10000_test@google.com_Michael Lo
+example3_1_0
